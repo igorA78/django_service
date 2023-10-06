@@ -1,0 +1,77 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block light_block %}
+<div class="row align-items-center">
+    <div class="col-8 text-center">
+        <h1 class="">Редактирование пользователя</h1>
+        <hr>
+        <form method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-9 text-start">
+                    <p>Почта: <b>{{ object.email }}</b></p>
+                    <p>Имя Фамилия: <b>{{ object.first_name }} {{ object.last_name }}</b></p>
+                    {% if user.is_superuser %}
+                        <p>Статус: <b>{{ object.get_status_display }}</b></p>
+                    {% else %}
+                        Статус: {{ form.status }}
+                    {% endif %}
+                </div>
+                <div class="col-3 align-self-center">
+                    <a class="btn btn-secondary btn-lg" href="{% url 'users:list' %}">
+                        К списку пользователей
+                    </a>
+                    {% if not user.is_superuser %}
+                    <button type="submit" class="btn btn-secondary btn-lg container-fluid mt-2"
+                            href="{% url 'users:update' object.pk %}">
+                        Сохранить
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-4 text-center">
+        <img src="{% static 'users/img/detail_main_img.png' %}" class="img-fluid"/>
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block dark_block %}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for mailing in object.mailing_set.all %}
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-header text-center">
+                <div class="row">
+                    <div class="col-1 text-start m-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
+                             class="bi bi-envelope-fill" viewBox="0 0 16 16">
+                            <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/>
+                        </svg>
+                    </div>
+                    <div class="col-11 center">
+                        {{ mailing.title }}
+                    </div>
+                </div>
+            </div>
+            <div class="card-body text-secondary">
+                {{ mailing.description }}
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'mailings:detail' mailing.pk %}" class="btn btn-outline-info">Просмотр</a>
+                <a href="{% url 'mailings:update' mailing.pk %}" class="btn btn-outline-warning opacity-75">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                         class="bi bi-pencil" viewBox="0 0 16 16">
+                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

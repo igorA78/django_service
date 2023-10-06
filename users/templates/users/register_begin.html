@@ -1,0 +1,23 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block light_block %}
+<div class="row align-items-center">
+    <div class="col-1 ">
+    </div>
+    <div class="col-6 ">
+        <h1>
+            Регистрация
+        </h1>
+        <br/>На вашу почту было отправлено письмо. Перейдите по ссылке из письма для завершения регистрации.
+    </div>
+    <div class="col-5 text-center">
+        <img src="{% static 'users/img/register_begin_main_img.png' %}" class="img-fluid"/>
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block dark_block %}
+{% endblock %}

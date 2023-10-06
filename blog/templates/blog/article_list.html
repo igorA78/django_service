@@ -1,0 +1,51 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load blog_tags %}
+
+
+{% block light_block %}
+<div class="row align-items-center">
+    <div class="col-8 text-center">
+        <h1 class="">Блог</h1>
+        </div>
+    <div class="col-4">
+        <img src="{% static 'blog/img/list_main_img.png' %}" class="img-fluid"/>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block dark_block %}
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for object in object_list %}
+    <div class="col">
+        <div class="card h-100 mb-0">
+            <div class="row g-0 align-items-center h-100">
+                <div class="col-md-4">
+                    {% if object.preview %}
+                    <img src="{% mediapath object.preview %}" class="img-fluid rounded-start"/>
+                    {% else %}
+                    <img src="{% static 'blog/img/default_img.png' %}" class="img-fluid rounded-start"/>
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ object.title }}</h5>
+                        <p class="card-text text-end"><small class="text-secondary">{{ object.published_at }}</small>
+                        </p>
+                        <hr>
+                        <p class="card-text text-secondary">{{ object.text |safe | truncatechars:40 }}</p>
+
+                        <p class="card-text text-end"><small class="text-secondary">
+                            <a class="btn btn-outline-secondary" href="{% url 'blog:detail' object.pk %}">
+                                Подробнее
+                            </a>
+                        </small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

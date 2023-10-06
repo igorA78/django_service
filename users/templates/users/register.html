@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block light_block %}
+<div class="row align-items-center">
+    <div class="col-1 ">
+    </div>
+    <div class="col-6 ">
+        <h1 class="ms-2">
+            Регистрация
+        </h1>
+        <form method="post" class="container-fluid">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-secondary">
+                Зарегистрироваться
+            </button>
+        </form>
+    </div>
+    <div class="col-5 text-center">
+        <img src="{% static 'users/img/register_main_img.png' %}" class="img-fluid"/>
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block dark_block %}
+{% endblock %}

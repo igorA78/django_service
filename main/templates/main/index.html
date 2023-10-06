@@ -1,0 +1,71 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load blog_tags %}
+
+
+{% block light_block %}
+<div class="row align-items-center">
+    <div class="col-9 text-center">
+        <h1 class="">E-mail - рассылки - что может быть проще</h1>
+        <p class="fs-4">Здесь вы можете создать и настроить ваши рассылки,<br />
+            а также в нашем блоге узнать много интересной информации.</p>
+        <hr />
+        <h3>Статистика</h3>
+        <table class="container-fluid">
+            <tr>
+                <td width="33%">Количество<br>рассылок всего</td>
+                <td width="33%">Количество<br>активных рассылок</td>
+                <td>Количество<br>уникальных клиентов для рассылок</td>
+            </tr>
+            <tr>
+                <td class="fs-3"><b>{{ mailings_count }}</b></td>
+                <td class="fs-3"><b>{{ mailings_active_count }}</b></td>
+                <td class="fs-3"><b>{{ clients_count }}</b></td>
+            </tr>
+        </table>
+
+    </div>
+    <div class="col-3 text-center">
+        <img src="{% static 'main/img/main_img.png' %}" class="img-fluid"/>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block dark_block %}
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for object in object_list %}
+    <div class="col">
+        <div class="card h-100 mb-0">
+            <div class="row g-0 align-items-center h-100">
+                <div class="col-md-4">
+                    {% if object.preview %}
+                    <img src="{% mediapath object.preview %}" class="img-fluid rounded-start"/>
+                    {% else %}
+                    <img src="{% static 'blog/img/default_img.png' %}" class="img-fluid rounded-start"/>
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ object.title }}</h5>
+                        <p class="card-text text-end"><small class="text-secondary">{{ object.published_at }}</small>
+                        </p>
+                        <hr>
+                        <p class="card-text text-secondary">{{ object.text | safe | truncatechars:40 }}</p>
+
+                        <p class="card-text text-end"><small class="text-secondary">
+                            <a class="btn btn-outline-secondary" href="{% url 'blog:detail' object.pk %}">
+                            Подробнее
+                            </a>
+                        </small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+
+{% endblock %}

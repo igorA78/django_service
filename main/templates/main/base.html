@@ -1,0 +1,232 @@
+{% load static %}
+<!doctype html>
+<html lang="ru" data-bs-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>email-service</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'custom_css/style.css' %}" rel="stylesheet">
+
+
+</head>
+<body class="fs-5">
+
+<div class="navbar shadow-sm">
+    <div class="container">
+        <div class="col-6">
+            <a href="{% url 'main:index' %}" class="navbar-brand d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
+                     class="bi bi-envelope-paper" viewBox="0 0 18 18">
+                    <path d="M4 0a2 2 0 0 0-2 2v1.133l-.941.502A2 2 0 0 0 0 5.4V14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V5.4a2 2 0 0 0-1.059-1.765L14 3.133V2a2 2 0 0 0-2-2H4Zm10 4.267.47.25A1 1 0 0 1 15 5.4v.817l-1 .6v-2.55Zm-1 3.15-3.75 2.25L8 8.917l-1.25.75L3 7.417V2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v5.417Zm-11-.6-1-.6V5.4a1 1 0 0 1 .53-.882L2 4.267v2.55Zm13 .566v5.734l-4.778-2.867L15 7.383Zm-.035 6.88A1 1 0 0 1 14 15H2a1 1 0 0 1-.965-.738L8 10.083l6.965 4.18ZM1 13.116V7.383l4.778 2.867L1 13.117Z"/>
+                </svg>
+                <strong class="ms-3 fs-3">email-service</strong>
+            </a>
+        </div>
+        <div class="col-6 d-flex justify-content-end">
+            <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover ms-4"
+               href="{% url 'mailings:list' %}" > Рассылки </a>
+            <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover ms-4"
+               href="{% url 'blog:list' %}" > Блог </a>
+            {% if perms.users.moderator %}
+            <a class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover ms-4"
+               href="{% url 'users:list' %}" > Пользователи </a>
+            {% endif %}
+
+            <div class="nav-item dropdown ps-5">
+                <a class="nav-link navbar-toggler ms-5" href="#" role="button" data-bs-toggle="dropdown"
+                   aria-expanded="false">
+                    {% if user.is_authenticated %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                             class="bi bi-person-fill-check" viewBox="0 0 16 16">
+                            <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                            <path d="M2 13c0 1 1 1 1 1h5.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.544-3.393C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Z"/>
+                        </svg>
+                    {% else %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                             class="bi bi-person-fill-dash" viewBox="0 0 16 16">
+                            <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM11 12h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1 0-1Zm0-7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                            <path d="M2 13c0 1 1 1 1 1h5.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.544-3.393C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Z"/>
+                        </svg>
+                    {% endif %}
+                </a>
+                <ul class="dropdown-menu" style="left: -2%">
+                    {% if user.is_authenticated %}
+                    <li><a class="dropdown-item" href="{% url 'users:logout' %}">Выйти</a></li>
+                    <li><a class="dropdown-item" href="{% url 'users:profile' %}">Профиль</a></li>
+                    {% else %}
+                    <li><a class="dropdown-item" href="{% url 'users:login' %}">Войти</a></li>
+                    <li><a class="dropdown-item" href="{% url 'users:register' %}">Регистрация</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <button class="navbar-toggler ms-2" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#mainMenu" aria-controls="mainMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="mainMenu"
+     aria-labelledby="mainMenu">
+    <div class="offcanvas-header border-bottom">
+        <span class="fs-3 fw-semibold">Меню</span>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="list-unstyled ps-0">
+            <li class="my-4">
+                <a href="{% url 'main:index' %}"
+                   class="link-body-emphasis d-inline-flex text-decoration-none ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="30" fill="currentColor"
+                         class="bi bi-chevron-right me-2" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                    Главная
+                </a>
+            </li>
+
+            {% if user.is_authenticated %}
+            <li class="my-4">
+                Рассылки
+                <ul class="list-unstyled ps-4">
+                    <li class="my-2">
+                        <a href="{% url 'mailings:list' %}"
+                           class="link-body-emphasis d-inline-flex text-decoration-none ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="30" fill="currentColor"
+                                 class="bi bi-chevron-right me-2" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                            Все рассылки
+                        </a>
+                    </li>
+
+                    {% if not perms.users.moderator %}
+                    <li class="my-2">
+                        <a href="{% url 'mailings:create' %}"
+                           class="link-body-emphasis d-inline-flex text-decoration-none ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="30" fill="currentColor"
+                                 class="bi bi-chevron-right me-2" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                            Новая рассылка
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
+            {% endif %}
+
+            <li class="my-4">
+                <a href="{% url 'blog:list' %}"
+                   class="link-body-emphasis d-inline-flex text-decoration-none ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="30" fill="currentColor"
+                         class="bi bi-chevron-right me-2" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                    Блог
+                </a>
+            </li>
+
+            {% if perms.users.moderator %}
+            <li class="my-4">
+                <a href="{% url 'users:list' %}"
+                   class="link-body-emphasis d-inline-flex text-decoration-none ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="30" fill="currentColor"
+                         class="bi bi-chevron-right me-2" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                    Пользователи сервиса
+                </a>
+            </li>
+            {% endif %}
+
+            <hr>
+            <li class="my-4 text-secondary">
+                {% if user.is_authenticated %}
+                {% if user.first_name|add:user.last_name != '' %}
+                {{ user.first_name|add:' '|add:user.last_name }}
+                {% else %}
+                {{ user.email }}
+                {% endif %}
+                <ul class="list-unstyled ps-4">
+                    <li class="my-2">
+                        <a href="{% url 'users:logout' %}"
+                           class="link-body-emphasis d-inline-flex text-decoration-none ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="30" fill="currentColor"
+                                 class="bi bi-chevron-right me-2" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                            Выйти
+                        </a>
+                    </li>
+                    <li class="my-2">
+                        <a href="{% url 'users:profile' %}"
+                           class="link-body-emphasis d-inline-flex text-decoration-none ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="30" fill="currentColor"
+                                 class="bi bi-chevron-right me-2" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                            Профиль
+                        </a>
+                    </li>
+                </ul>
+                {% else %}
+                Пользователь
+                <ul class="list-unstyled ps-4">
+                    <li class="my-2">
+                        <a href="{% url 'users:login' %}"
+                           class="link-body-emphasis d-inline-flex text-decoration-none ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="30" fill="currentColor"
+                                 class="bi bi-chevron-right me-2" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                            Войти
+                        </a>
+                    </li>
+                    <li class="my-2">
+                        <a href="{% url 'users:register' %}"
+                           class="link-body-emphasis d-inline-flex text-decoration-none ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="30" fill="currentColor"
+                                 class="bi bi-chevron-right me-2" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                            Регистрация
+                        </a>
+                    </li>
+                </ul>
+                {% endif %}
+
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="bg_light_custom">
+    <div class="container py-4">
+        {% block light_block %}
+        {% endblock %}
+    </div>
+</div>
+
+
+<div class="container py-4">
+    {% block dark_block %}
+    {% endblock %}
+</div>
+
+
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>
